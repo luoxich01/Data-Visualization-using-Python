@@ -10,7 +10,7 @@ import folium
 # You have to download this file and set the directory where you saved it
 sfo_geo = os.path.join('/Users/luoxich01/Desktop/', 'san-francisco.json')
  
-# Load the criminal data 
+# Load the crime data 
 # Find the original file here: https://github.com/Data-Visualization-using-Python/data
 crime_data = os.path.join('/Users/luoxich01/Desktop/', 'Police_Department_Incidents_-_Previous_Year__2016_.csv')
 crime = pd.read_csv(crime_data)
