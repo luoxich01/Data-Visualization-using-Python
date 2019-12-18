@@ -49,3 +49,5 @@ sfo_map.choropleth(
  
 # display
 sfo_map
+
+# The image output is under the issue tap and feel free to check it out!
