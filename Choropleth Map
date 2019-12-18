@@ -1,0 +1,51 @@
+# Import libraries
+!conda install -c conda-forge folium=0.5.0 --yes
+
+import pandas as pd
+import numpy as np
+import folium
+ 
+# Load the shape of the zone (San Francisco)
+# Find the original file here: https://github.com/Data-Visualization-using-Python/data
+# You have to download this file and set the directory where you saved it
+sfo_geo = os.path.join('/Users/luoxich01/Desktop/', 'san-francisco.json')
+ 
+# Load the criminal data 
+# Find the original file here: https://github.com/Data-Visualization-using-Python/data
+crime_data = os.path.join('/Users/luoxich01/Desktop/', 'Police_Department_Incidents_-_Previous_Year__2016_.csv')
+crime = pd.read_csv(crime_data)
+
+# count the criminal rate for each district in San Francisco 
+crime_count=crime["PdDistrict"].value_counts()
+crime_count=crime_count.reset_index()
+crime_count.rename(columns={'index':'Neighborhood',"PdDistrict":"Count"},inplace=True)
+
+# Initialize the map:
+sfo_map = folium.Map(location=[37.773972, -122.431297], zoom_start=12) 
+ 
+# create a numpy array of length 6 and has linear spacing from the minium total immigration to the maximum total immigration
+threshold_scale = np.linspace(crime_count['Count'].min(),
+                              crime_count['Count'].max(),
+                              6, dtype=int)
+# change the numpy array to a list
+threshold_scale = threshold_scale.tolist()
+# make sure that the last value of the list is greater than the maximum immigration
+threshold_scale[-1] = threshold_scale[-1] + 1 
+
+
+# Add the color for the chloropleth:
+sfo_map.choropleth(
+    geo_data=sfo_geo,
+    data=crime_count,
+    columns=['Neighborhood', 'Count'],
+    threshold_scale=threshold_scale,
+    key_on='feature.properties.DISTRICT',
+    name='choropleth',
+    fill_color='YlOrRd', 
+    fill_opacity=0.7, 
+    line_opacity=0.2,
+    legend_name='Crime Rate in San Francisco',
+)
+ 
+# display
+sfo_map
